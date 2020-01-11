@@ -1,7 +1,6 @@
 <template>
-  <div>
-      home
-      <van-button type="default">默认按钮</van-button>
+  <div class="container">
+    主页
   </div>
 </template>
 

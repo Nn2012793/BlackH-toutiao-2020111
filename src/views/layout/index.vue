@@ -6,7 +6,8 @@
     title="黑马头条"
     right-text="搜索"
     fixed
-    @click-right="$router.push('/search')"></van-nav-bar>
+    @click-right="$router.push('/search')">
+    </van-nav-bar>
     <!-- 显示区域 -->
     <div class="my-wrapper" :class="{noTop:!showNavBar}">
       <router-view></router-view>

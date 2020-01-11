@@ -1,6 +1,10 @@
 <template>
-  <div>
-      user
+  <div class="container">
+  <van-nav-bar
+  title="用户中心"
+  left-arrow
+  @click-left="$router.back()"
+  ></van-nav-bar>
   </div>
 </template>
 

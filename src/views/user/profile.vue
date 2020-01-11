@@ -1,6 +1,11 @@
 <template>
-  <div>
-      profile
+  <div class="container">
+  <van-nav-bar
+  title="个人设置"
+  left-arrow
+  @click-left="$router.back()"
+  right-text="保存"
+  ></van-nav-bar>
   </div>
 </template>
 
