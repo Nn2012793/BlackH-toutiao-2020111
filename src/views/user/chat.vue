@@ -1,13 +1,12 @@
 <template>
   <div>
-      latout
-      <router-view></router-view>
+      小智同学
   </div>
 </template>
 
 <script>
 export default {
-  name: 'layout'
+  name: 'chat'
 }
 </script>
 

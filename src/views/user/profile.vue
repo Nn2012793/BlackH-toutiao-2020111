@@ -1,13 +1,12 @@
 <template>
   <div>
-      latout
-      <router-view></router-view>
+      profile
   </div>
 </template>
 
 <script>
 export default {
-  name: 'layout'
+  name: 'profile'
 }
 </script>
 

@@ -1,12 +1,12 @@
 <template>
   <div>
-      article
+      文章内容
   </div>
 </template>
 
 <script>
 export default {
-  name: 'article'
+  name: 'articles'
 }
 </script>
 

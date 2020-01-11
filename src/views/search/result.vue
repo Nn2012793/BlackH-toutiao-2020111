@@ -1,13 +1,12 @@
 <template>
   <div>
-      latout
-      <router-view></router-view>
+      搜索结果
   </div>
 </template>
 
 <script>
 export default {
-  name: 'layout'
+  name: 'searchresult'
 }
 </script>
 
