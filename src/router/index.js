@@ -17,10 +17,10 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'home',
     component: Layout, //  页面展示
     children: [{
       path: '/',
+      name: 'home',
       component: Home
     },
     {
