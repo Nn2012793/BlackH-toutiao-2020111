@@ -28,7 +28,7 @@ const routes = [
       component: Question
     },
     {
-      path: '/vedio',
+      path: '/video',
       component: Vedio
     },
     {
