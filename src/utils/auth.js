@@ -2,7 +2,7 @@
 const USER_TOKEN = 'hm-toutiao-lnh-91' // 定义专门用来存储用户信息的key
 // 设置用户信息
 export function setUser (user) {
-  localStorage.setItem(USER_TOKEN, JSON.Stringify(user))
+  localStorage.setItem(USER_TOKEN, JSON.stringify(user))
 }
 // 读取用户信息
 export function getUser () {

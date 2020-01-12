@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import { login } from '@/api/user'
+import { mapMutations } from 'vuex'
 export default {
   name: 'login',
   data () {
@@ -34,6 +36,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['updateUser']),
     checkMobile () {
       // 判断是否为空
       if (!this.loginForm.mobile) {
@@ -62,9 +65,15 @@ export default {
       this.errMSG.code = ''
       return true
     },
-    login () {
+    async login () {
       if (this.checkMobile() && this.checkCode()) {
         // 如果这两个方法都通过了 还要去后端调用接口校验用户名密码
+        // 提示消息表示登陆成功
+        const data = await login(this.loginForm) // 获取更新后的data（token，refresh_token）
+        this.updateUser({ user: data })
+        this.$notice({ type: 'success', message: '登陆成功' })
+        let { redirectURL } = this.$route.query
+        this.$router.push(redirectURL || '/')
       }
     }
   }
@@ -75,5 +84,4 @@ export default {
 .btn-box {
   padding: 20px
 }
-
 </style>
