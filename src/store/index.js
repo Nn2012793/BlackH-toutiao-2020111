@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   //  放置数据 在初始化的时候直接把用户信息给我们的公共状态
   state: {
+    // user是登陆时得到的返回结果---登录接口---data：{token，refresh_token}
     user: auth.getUser()
   },
   // 修改state数据  vuex的数据更新与缓存同步

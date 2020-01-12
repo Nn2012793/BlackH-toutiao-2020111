@@ -1,6 +1,12 @@
 <template>
   <div class="container">
-      video
+     <van-skeleton avatar title :row="3"></van-skeleton>
+     <div class="split"></div>
+     <van-skeleton avatar title :row="3"></van-skeleton>
+     <div class="split"></div>
+     <van-skeleton avatar title :row="3"></van-skeleton>
+     <div class="split"></div>
+     <van-skeleton avatar title :row="3"></van-skeleton>
   </div>
 </template>
 
