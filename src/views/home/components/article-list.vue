@@ -3,23 +3,23 @@
     <van-pull-refresh v-model="downLoading" @refresh="onRefresh" :success-text="refreshSucessText">
       <!-- //防止van-list组件，实现上拉加载 -->
       <van-list v-model="upLoading" :finished="finished" finished-text="真的没有了" @load="onLoad">
-        <van-cell v-for="article in articles" :key="article">
+        <van-cell v-for="article in articles" :key="article.art_id.toString()">
           <div class="article_item">
-            <h3 class="van-ellipsis">PullRefresh下拉刷新PullRefresh下拉刷新下拉刷新下拉刷新</h3>
+            <h3 class="van-ellipsis">{{article.title}}</h3>
             <!-- 三图模式 -->
-            <div class="img_box">
-              <van-image class="w33" fit="cover" src="https://img.yzcdn.cn/vant/cat.jpeg" />
-              <van-image class="w33" fit="cover" src="https://img.yzcdn.cn/vant/cat.jpeg" />
-              <van-image class="w33" fit="cover" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+            <div class="img_box" v-if="article.cover.type === 3">
+              <van-image class="w33" fit="cover" :src="article.cover.images[0]" />
+              <van-image class="w33" fit="cover" :src="article.cover.images[1]" />
+              <van-image class="w33" fit="cover" :src="article.cover.images[2]" />
             </div>
             <!-- 单图模式 -->
-            <div class="img_box">
-              <van-image class="w100" fit="cover" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+            <div class="img_box" v-if="article.cover.type === 1">
+              <van-image class="w100" fit="cover" :src="article.cover.images[0]" />
             </div>
             <div class="info_box">
-              <span>你像一阵风</span>
-              <span>8评论</span>
-              <span>10分钟前</span>
+              <span>{{article.aut_name}}</span>
+              <span>{{article.comm_count}}</span>
+              <span>{{article.pubdate}}</span>
               <span class="close">
                 <van-icon name="cross"></van-icon>
               </span>
@@ -32,10 +32,11 @@
 </template>
 
 <script>
+import { getArticles } from '@/api/articles'
 export default {
   name: 'article-list',
   props: {
-    channle_id: {
+    channel_id: {
       type: Number, // 指定要传的props类型，可以对props传入值进行一个校验
       required: true, // 要求props必传，否则报错
       default: null // 给props一个默认值
@@ -53,22 +54,37 @@ export default {
   },
   methods: {
     //  上拉加载方法
-    onLoad () {
-      setTimeout(() => {
-        if (this.articles.length < 50) {
-          // 创建空数组
-          let arr = Array.from(
-            Array(10),
-            (value, index) => this.articles.length + index + 1
-          )
-          // 原数组尾部追加新数组
-          this.articles.push(...arr)
-          // 修改upLoading值
-          this.upLoading = false
-        } else {
-          this.finished = true
-        }
-      }, 1000)
+    async onLoad () {
+    //   setTimeout(() => {
+    //     if (this.articles.length < 50) {
+    //       // 创建空数组
+    //       let arr = Array.from(
+    //         Array(10),
+    //         (value, index) => this.articles.length + index + 1
+    //       )
+    //       // 原数组尾部追加新数组
+    //       this.articles.push(...arr)
+    //       // 修改upLoading值
+    //       this.upLoading = false
+    //     } else {
+    //       this.finished = true
+    //     }
+    //   }, 1000)
+      const data = await getArticles({
+        channel_id: this.channel_id,
+        timestamp: this.timestamp || Date.now()
+      })
+      // console.log(data)
+      this.articles.push(...data.results) // 尾部追加获取的新数组
+      this.upLoading = false // 关掉加载状态
+      // 判断历史时间戳是否存在
+      if (data.pre_timestamp) {
+        // 1.有历史时间戳--继续往下看
+        this.timestamp = data.pre_timestamp
+      } else {
+        // 2.无历史时间戳---finished为true
+        this.finished = true
+      }
     },
     // 下拉刷新方法
     onRefresh () {
