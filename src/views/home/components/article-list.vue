@@ -34,13 +34,21 @@
 <script>
 export default {
   name: 'article-list',
+  props: {
+    channle_id: {
+      type: Number, // 指定要传的props类型，可以对props传入值进行一个校验
+      required: true, // 要求props必传，否则报错
+      default: null // 给props一个默认值
+    }
+  },
   data () {
     return {
       upLoading: false, // 上拉加载状态，为true加载
       finished: false, // 为true表示全部加载
       articles: [], // 空数组接受上拉加载数据
       downLoading: false, // 默认不开启下拉刷新
-      refreshSucessText: '更新成功'
+      refreshSucessText: '',
+      timestamp: null // 定义一个时间戳，告诉服务器需求哪个时间的数据
     }
   },
   methods: {

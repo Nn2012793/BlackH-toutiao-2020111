@@ -4,7 +4,7 @@
       <van-tab v-for="item in channels" :title="item.name" :key="item.id">
         <!-- // 这里的div设置了滚动条 目的是给后面做阅读记忆 留下伏笔 -->
         <!-- // 阅读记忆---文章看到一半的时候，滑倒了其他区域或者页面，回来时，文章还保持在原位置 -->
-        <article-list></article-list>
+        <article-list :channle_id="item.id"></article-list>
       </van-tab>
     </van-tabs>
     <span class="bar_btn">
