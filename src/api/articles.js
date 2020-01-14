@@ -10,3 +10,10 @@ export function getArticles (params) {
     }
   })
 }
+export function dislikeArticle (data) {
+  return request({
+    url: '/article/dislikes',
+    method: 'post',
+    data
+  })
+}

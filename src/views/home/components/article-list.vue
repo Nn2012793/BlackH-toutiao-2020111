@@ -38,6 +38,7 @@
 <script>
 import { getArticles } from '@/api/articles'
 import { mapState } from 'vuex'
+import eventBus from '@/utils/eventBus'
 export default {
   name: 'article-list',
   props: {
@@ -126,6 +127,16 @@ export default {
         this.refreshSucessText = `已是最新数据`
       }
     }
+  },
+  created () {
+    eventBus.$on('delArticle', (articleID, channelID) => {
+      if (this.channel_id === channelID) {
+        let index = this.articles.findIndex(item => item.art_id.toString() === articleID)
+        if (index > -1) {
+          this.articles.splice(index, 1)
+        }
+      }
+    })
   }
 }
 </script>

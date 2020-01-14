@@ -11,7 +11,7 @@
       <van-icon name="wap-nav"></van-icon>
     </span>
     <van-popup :style="{ width: '80%' }" v-model="showMoreAction">
-      <more-action ></more-action>
+      <more-action @dislike="dislike"></more-action>
     </van-popup>
   </div>
 </template>
@@ -20,6 +20,8 @@
 import ArticleList from './components/article-list'
 import MoreAction from './components/more-action'
 import { getMyChannels } from '@/api/channels'
+import { dislikeArticle } from '@/api/articles'
+import eventBus from '@/utils/eventBus'
 export default {
   name: 'articles',
   data () {
@@ -42,6 +44,23 @@ export default {
     openMoreAction (artId) {
       this.showMoreAction = true
       this.articleID = artId
+    },
+    async dislike () {
+      try {
+        if (this.articleID) {
+          await dislikeArticle(
+            {
+              target: this.articleID
+            },
+            eventBus.$emit('delArticle', this.articleID, this.channels[this.activeIndex].id),
+            this.$notice({ type: 'success', message: '操作成功' }),
+            this.showMoreAction = false
+          )
+        }
+      } catch (error) {
+        this.$notice({ type: 'danger', message: '操作失败' })
+        this.showMoreAction = false
+      }
     }
   },
   created () {
