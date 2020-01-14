@@ -4,11 +4,7 @@
       <van-tab v-for="index in 8" :title="'标签 ' + index" :key="index">
         <!-- // 这里的div设置了滚动条 目的是给后面做阅读记忆 留下伏笔 -->
         <!-- // 阅读记忆---文章看到一半的时候，滑倒了其他区域或者页面，回来时，文章还保持在原位置 -->
-        <div class="scroll-wrapper">
-          <van-cell-group>
-            <van-cell v-for="item in 20" :key="item">{{index}}</van-cell>
-          </van-cell-group>
-        </div>
+        <article-list></article-list>
       </van-tab>
     </van-tabs>
     <span class="bar_btn">
@@ -18,12 +14,16 @@
 </template>
 
 <script>
+import ArticleList from './components/article-list'
 export default {
   name: 'articles',
   data () {
     return {
       activeIndex: 0
     }
+  },
+  components: {
+    ArticleList
   }
 }
 </script>
