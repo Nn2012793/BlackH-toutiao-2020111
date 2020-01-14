@@ -4,33 +4,44 @@
       <van-tab v-for="item in channels" :title="item.name" :key="item.id">
         <!-- // 这里的div设置了滚动条 目的是给后面做阅读记忆 留下伏笔 -->
         <!-- // 阅读记忆---文章看到一半的时候，滑倒了其他区域或者页面，回来时，文章还保持在原位置 -->
-        <article-list :channel_id="item.id"></article-list>
+        <article-list :channel_id="item.id" @showMoreAction="openMoreAction"></article-list>
       </van-tab>
     </van-tabs>
     <span class="bar_btn">
       <van-icon name="wap-nav"></van-icon>
     </span>
+    <van-popup :style="{ width: '80%' }" v-model="showMoreAction">
+      <more-action ></more-action>
+    </van-popup>
   </div>
 </template>
 
 <script>
 import ArticleList from './components/article-list'
+import MoreAction from './components/more-action'
 import { getMyChannels } from '@/api/channels'
 export default {
   name: 'articles',
   data () {
     return {
       activeIndex: 0,
-      channels: []
+      channels: [],
+      showMoreAction: false,
+      articleID: null
     }
   },
   components: {
-    ArticleList
+    ArticleList,
+    MoreAction
   },
   methods: {
     async getMyChannels () {
       let data = await getMyChannels()
       this.channels = data.channels
+    },
+    openMoreAction (artId) {
+      this.showMoreAction = true
+      this.articleID = artId
     }
   },
   created () {
