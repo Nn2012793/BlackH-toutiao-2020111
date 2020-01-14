@@ -25,7 +25,7 @@ export default {
   data () {
     return {
       loginForm: {
-        mobile: '13911111111',
+        mobile: '15035509773',
         code: '246810'
       },
       // 专门存放提示信息的

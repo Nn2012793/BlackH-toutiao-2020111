@@ -8,19 +8,19 @@
             <h3 class="van-ellipsis">{{article.title}}</h3>
             <!-- 三图模式 -->
             <div class="img_box" v-if="article.cover.type === 3">
-              <van-image class="w33" fit="cover" :src="article.cover.images[0]" />
-              <van-image class="w33" fit="cover" :src="article.cover.images[1]" />
-              <van-image class="w33" fit="cover" :src="article.cover.images[2]" />
+              <van-image lazy-load class="w33" fit="cover" :src="article.cover.images[0]" />
+              <van-image lazy-load class="w33" fit="cover" :src="article.cover.images[1]" />
+              <van-image lazy-load class="w33" fit="cover" :src="article.cover.images[2]" />
             </div>
             <!-- 单图模式 -->
             <div class="img_box" v-if="article.cover.type === 1">
-              <van-image class="w100" fit="cover" :src="article.cover.images[0]" />
+              <van-image lazy-load class="w100" fit="cover" :src="article.cover.images[0]" />
             </div>
             <div class="info_box">
               <span>{{article.aut_name}}</span>
               <span>{{article.comm_count}}</span>
-              <span>{{article.pubdate}}</span>
-              <span class="close">
+              <span>{{article.pubdate | relTime}}</span>
+              <span class="close" v-if="user.token">
                 <van-icon name="cross"></van-icon>
               </span>
             </div>
@@ -33,6 +33,7 @@
 
 <script>
 import { getArticles } from '@/api/articles'
+import { mapState } from 'vuex'
 export default {
   name: 'article-list',
   props: {
@@ -41,6 +42,9 @@ export default {
       required: true, // 要求props必传，否则报错
       default: null // 给props一个默认值
     }
+  },
+  computed: {
+    ...mapState(['user'])
   },
   data () {
     return {
@@ -70,13 +74,14 @@ export default {
     //       this.finished = true
     //     }
     //   }, 1000)
+      await this.$sleep(1000) // utils/plugin里面封装的原型方法
       const data = await getArticles({
         channel_id: this.channel_id,
         timestamp: this.timestamp || Date.now()
       })
       // console.log(data)
       this.articles.push(...data.results) // 尾部追加获取的新数组
-      this.upLoading = false // 关掉加载状态
+      this.upLoading = false // 关掉上滑加载状态
       // 判断历史时间戳是否存在
       if (data.pre_timestamp) {
         // 1.有历史时间戳--继续往下看
@@ -87,14 +92,35 @@ export default {
       }
     },
     // 下拉刷新方法
-    onRefresh () {
-      setTimeout(() => {
-        let arr = Array.from(Array(10), (value, index) => '追加' + (index + 1))
-        // 头部追加数据
-        this.articles.unshift(...arr)
-        this.downLoading = false // 关闭下拉刷新状态
-        this.refreshSucessText = `更新${arr.length}条数据`
-      }, 1000)
+    async onRefresh () {
+    //   setTimeout(() => {
+    //     let arr = Array.from(Array(10), (value, index) => '追加' + (index + 1))
+    //     // 头部追加数据
+    //     this.articles.unshift(...arr)
+    //     this.downLoading = false // 关闭下拉刷新状态
+    //     this.refreshSucessText = `更新${arr.length}条数据`
+    //   }, 1000)
+    // this.timestamp = Date.now() 下拉刷新永远拉取最新数据
+      await this.$sleep(2000) // utils/plugin里面封装的原型方法
+      this.downLoading = false // 关掉下拉刷新状态
+      const data = await getArticles({
+        channel_id: this.channel_id,
+        timestamp: Date.now()
+      })
+      // 有可能无最新数据
+      if (data.results.length) {
+        // 长度大于零 表示有数据 覆盖原article数据
+        this.articles = data.results
+        // 假如之前已经上滑到底 finished为true了
+        // 此时应该重新声明finished为false 继续实现下拉
+        this.finished = false
+        // 注意此时依然需要此次历史时间戳 用于刷新后的上滑加载
+        this.timestamp = data.pre_timestamp
+        this.refreshSucessText = `更新${data.results.length}条数据`
+      } else {
+        // 没有新数据的情况
+        this.refreshSucessText = `已是最新数据`
+      }
     }
   }
 }
