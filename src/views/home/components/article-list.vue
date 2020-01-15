@@ -117,7 +117,7 @@ export default {
         // 长度大于零 表示有数据 覆盖原article数据
         this.articles = data.results
         // 假如之前已经上滑到底 finished为true了
-        // 此时应该重新声明finished为false 继续实现下拉
+        // 此时应该重新声明finished为false 继续实现上滑加载
         this.finished = false
         // 注意此时依然需要此次历史时间戳 用于刷新后的上滑加载
         this.timestamp = data.pre_timestamp

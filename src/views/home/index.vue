@@ -7,20 +7,30 @@
         <article-list :channel_id="item.id" @showMoreAction="openMoreAction"></article-list>
       </van-tab>
     </van-tabs>
-    <span class="bar_btn">
+    <span class="bar_btn" @click="showChannelEdit=true">
       <van-icon name="wap-nav"></van-icon>
     </span>
     <van-popup :style="{ width: '80%' }" v-model="showMoreAction">
-      <more-action @dislike="dislike"></more-action>
+      <more-action @report="dislikeOrRport('report',$event)" @dislike="dislikeOrRport('dislike')"></more-action>
     </van-popup>
+    <van-action-sheet :round="false" title="编辑频道" v-model="showChannelEdit">
+      <channel-edit
+      :activeIndex="activeIndex"
+      :channels="channels"
+      @selectChannel="selectChannel"
+      @delChannel="delChannel"
+      @addChannel="addChannel"
+      ></channel-edit>
+ </van-action-sheet>
   </div>
 </template>
 
 <script>
 import ArticleList from './components/article-list'
 import MoreAction from './components/more-action'
-import { getMyChannels } from '@/api/channels'
-import { dislikeArticle } from '@/api/articles'
+import ChannelEdit from './components/channel-edit'
+import { getMyChannels, delChannel, addChannel } from '@/api/channels'
+import { dislikeArticle, reportArticle } from '@/api/articles'
 import eventBus from '@/utils/eventBus'
 export default {
   name: 'articles',
@@ -28,13 +38,15 @@ export default {
     return {
       activeIndex: 0,
       channels: [],
-      showMoreAction: false,
-      articleID: null
+      showMoreAction: false, // 不感兴趣弹窗显示状态
+      articleID: null,
+      showChannelEdit: false // 编辑弹窗状态
     }
   },
   components: {
     ArticleList,
-    MoreAction
+    MoreAction,
+    ChannelEdit
   },
   methods: {
     async getMyChannels () {
@@ -45,22 +57,46 @@ export default {
       this.showMoreAction = true
       this.articleID = artId
     },
-    async dislike () {
+    async dislikeOrRport (params, type) {
       try {
         if (this.articleID) {
-          await dislikeArticle(
-            {
-              target: this.articleID
-            },
-            eventBus.$emit('delArticle', this.articleID, this.channels[this.activeIndex].id),
-            this.$notice({ type: 'success', message: '操作成功' }),
-            this.showMoreAction = false
-          )
+          if (params === 'dislike') {
+            await dislikeArticle({ target: this.articleID })
+          } else {
+            await reportArticle({ target: this.articleID, type })
+          }
+          eventBus.$emit('delArticle', this.articleID, this.channels[this.activeIndex].id)
+          this.$notice({ type: 'success', message: '操作成功' })
+          this.showMoreAction = false
         }
       } catch (error) {
         this.$notice({ type: 'danger', message: '操作失败' })
         this.showMoreAction = false
       }
+    },
+    selectChannel (id) {
+      let index = this.channels.findIndex(item => item.id === id)
+      this.activeIndex = index
+      this.showChannelEdit = false
+    },
+    async delChannel (id) {
+      try {
+        await delChannel(id)
+        let index = this.channels.findIndex(item => item.id === id)
+        if (index <= this.activeIndex) {
+          this.activeIndex -= 1
+        }
+        if (index > -1) {
+          //  如果大于-1
+          this.channels.splice(index, 1) // 移除当前频道
+        }
+      } catch (error) {
+        this.$notice({ type: 'danger', message: '删除频道失败' })
+      }
+    },
+    async addChannel (channel) {
+      await addChannel(channel)
+      this.channels.push(channel)
     }
   },
   created () {
@@ -122,6 +158,17 @@ export default {
     z-index: 1000;
     &::before {
       font-size: 20px;
+    }
+  }
+}
+.van-action-sheet {
+  max-height: 100%;
+  height: 100%;
+  .van-action-sheet__header {
+    background: #3296fa;
+    color: #fff;
+    .van-icon-close {
+      color: #fff;
     }
   }
 }

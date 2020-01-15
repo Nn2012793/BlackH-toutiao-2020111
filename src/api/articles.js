@@ -10,10 +10,19 @@ export function getArticles (params) {
     }
   })
 }
+// 不感兴趣接口
 export function dislikeArticle (data) {
   return request({
     url: '/article/dislikes',
     method: 'post',
     data
+  })
+}
+// 举报文章接口
+export function reportArticle (data) {
+  return request({
+    url: '/article/reports',
+    data,
+    method: 'post'
   })
 }
