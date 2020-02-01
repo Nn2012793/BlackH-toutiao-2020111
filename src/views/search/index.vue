@@ -9,8 +9,8 @@
     shape="round"
     @keydown.enter="onSearch" />
     <van-cell-group class="suggest-box" v-if="q">
-      <van-cell icon="search">
-        <span>java</span>
+      <van-cell v-for="item in suggestList" :key="item" icon="search">
+        <span @click="toSearchResult(item)">{{item}}</span>
       </van-cell>
     </van-cell-group>
     <div class="history-box" v-else-if="historyList.length">
@@ -19,7 +19,7 @@
         <van-icon @click="delAllHistory" name="delete"></van-icon>
       </div>
       <van-cell-group>
-         <van-cell @click="toSearchResult(item)" v-for="(item,index) in historyList" :key="index">
+         <van-cell @click="toSearchHistoryResult(item)" v-for="(item,index) in historyList" :key="index">
           <a class="word_btn">{{ item }}</a>
           <van-icon  @click.stop="delHistory(index)" class="close_btn" slot="right-icon" name="cross" />
         </van-cell>
@@ -29,13 +29,15 @@
 </template>
 
 <script>
+import { suggestion } from '@/api/articles'
 const key = 'hm-91-toutiao-history' // 定义一个存贮和获取搜索历史缓存的key
 export default {
   name: 'search',
   data () {
     return {
       q: '', // 获取搜索框输入的内容
-      historyList: [] // 首先定义一个历史记录数据
+      historyList: [], // 首先定义一个历史记录数据
+      suggestList: []
     }
   },
   created () {
@@ -67,6 +69,9 @@ export default {
       //  也应该去搜索结果页面 而且 也要携带参数
       this.$router.push({ path: '/search/result', query: { q: text } })
     },
+    toSearchHistoryResult (text) {
+      this.$router.push({ path: '/search/result', query: { q: text } })
+    },
     onSearch () {
       // 跳转到搜索结果之前 应该把当前的搜索关键字 写入到历史记录
       // 搜索内容为空直接终止
@@ -83,6 +88,20 @@ export default {
       //  也应该去搜索结果页面 而且 也要携带参数
       // 直接跳转到搜索结果界面
       this.$router.push({ path: '/search/result', query: { q: this.q } })
+    }
+  },
+  watch: {
+    q () {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(async () => {
+        if (!this.q) {
+          this.suggestList = []
+          return false
+        }
+        let data = await suggestion({ q: this.q })
+        this.suggestList = data.options
+        // console.log(data.options)
+      }, 500)
     }
   }
 }

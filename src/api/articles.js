@@ -26,3 +26,37 @@ export function reportArticle (data) {
     method: 'post'
   })
 }
+// 联想搜索接口
+export function suggestion (params) {
+  return request({
+    url: '/suggestion',
+    params
+  })
+}
+/****
+ * 获取文章搜索的结果
+ * params是get参数
+ * data是body参数
+ * ***/
+export function searchArticle (params) {
+  return request({
+    url: '/search',
+    params
+  })
+}
+/***
+ *
+ *获取文章详情
+ * *****/
+export function getArticleInfo (id) {
+  return request({
+    url: `/articles/${id}`
+  })
+}
+/** 获取评论**/
+export function getComments (params) {
+  return request({
+    url: '/comments',
+    params
+  })
+}
