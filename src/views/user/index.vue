@@ -64,10 +64,8 @@ export default {
       userInfo: {}
     }
   },
-  computed: {
-    ...mapMutations(['clearUser'])
-  },
   methods: {
+    ...mapMutations(['clearUser']),
     async getUserInfo () {
       this.userInfo = await getUserInfo()
     },
@@ -80,7 +78,7 @@ export default {
         this.$router.push('/login')
         this.clearUser()
       } catch (error) {
-        // this.$notice({ type: 'danger', message: '操作失败' })
+        this.$notice({ type: 'danger', message: '操作失败' })
       }
     }
   },

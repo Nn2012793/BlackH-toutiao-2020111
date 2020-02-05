@@ -23,12 +23,14 @@
         <van-button round size="small" :class="{active: article.attitude === 0}" plain icon="delete">不喜欢</van-button>
       </div>
     </div>
+    <my-comments></my-comments>
   </div>
 </template>
 
 <script>
 import { getArticleInfo } from '@/api/articles'
 import { followUser, unFollowUser } from '@/api/user'
+import MyComments from './components/comment'
 export default {
   name: 'articles',
   data () {
@@ -50,11 +52,14 @@ export default {
           await followUser({ target: this.article.aut_id })
         }
         this.article.is_followed = !this.article.is_followed
-        this.$gnotify({ type: 'success', message: '操作成功' })
+        this.$notify({ type: 'success', message: '操作成功' })
       } catch (error) {
-        this.$gnotify({ type: 'danger', message: '操作失败' })
+        this.$notify({ type: 'danger', message: '操作失败' })
       }
     }
+  },
+  components: {
+    MyComments
   },
   created () {
     // 获取文章向详情数据

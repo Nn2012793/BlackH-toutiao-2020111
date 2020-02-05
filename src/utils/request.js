@@ -48,7 +48,7 @@ instance.interceptors.response.use(function (response) {
     // 重新登陆页面后---读取地址
     // 获取当前页面地址 router.currentRoute.path
     // 定义在顶端，随时调用let toPath = { path: '/login', query: { redirectURL: router.currentRoute.path } }
-    let toPath = { path: '/login', query: { redirectURL: router.currentRoute.path } }
+    let toPath = { path: '/login', query: { redirectURL: router.currentRoute.fullpath } }
     // 状态码401表示token失效  先判断是否有refresh_token
     if (store.state.user.refresh_token) {
       // 应该获取一个新的token 不能用instance 因为instance会再次进入拦截器 会再次获取失效的token

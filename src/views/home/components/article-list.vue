@@ -3,7 +3,7 @@
     <van-pull-refresh v-model="downLoading" @refresh="onRefresh" :success-text="refreshSucessText">
       <!-- //防止van-list组件，实现上拉加载 -->
       <van-list v-model="upLoading" :finished="finished" finished-text="真的没有了" @load="onLoad">
-        <van-cell v-for="article in articles" :key="article.art_id.toString()">
+        <van-cell :to="`/article?articleId=${article.art_id.toString()}`" v-for="article in articles" :key="article.art_id.toString()">
           <div class="article_item">
             <h3 class="van-ellipsis">{{article.title}}</h3>
             <!-- 三图模式 -->
