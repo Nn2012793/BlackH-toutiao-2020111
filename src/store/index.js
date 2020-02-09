@@ -8,7 +8,9 @@ export default new Vuex.Store({
   //  放置数据 在初始化的时候直接把用户信息给我们的公共状态
   state: {
     // user是登陆时得到的返回结果---登录接口---data：{token，refresh_token}
-    user: auth.getUser()
+    user: auth.getUser(),
+    // 存放头像数据
+    photo: null
   },
   // 修改state数据  vuex的数据更新与缓存同步
   mutations: {
@@ -19,6 +21,9 @@ export default new Vuex.Store({
     clearUser (state) {
       state.user = {}
       auth.delUser() // 清空缓存里的用户信息
+    },
+    updatePhoto (state, payload) {
+      state.photo = payload.photo // 更新用户头像
     }
   },
   // 异步处理数据，给mutations提交请求

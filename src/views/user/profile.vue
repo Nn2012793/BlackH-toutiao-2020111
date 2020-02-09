@@ -64,6 +64,7 @@
 
 <script>
 import { getUserProfile, updateImg, saveUserInfo } from '@/api/user'
+import { mapMutations } from 'vuex'
 import dayjs from 'dayjs'
 export default {
   name: 'profile',
@@ -95,6 +96,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['updatePhoto']),
     changeGender (item) {
       // this.user.gender = item.gender
       this.user.gender = item.name === '男' ? 0 : 1
@@ -112,6 +114,7 @@ export default {
       const data = await getUserProfile()
       this.user = data
       this.photo = data.photo
+      this.updatePhoto({ photo: data.photo }) // 更改vuex里面的state里面的用户头像
     },
     btnSave () {
       if (this.user.name.length < 1 || this.user.name.length > 7) {
@@ -148,6 +151,7 @@ export default {
       let result = await updateImg(data)
       // 应该 把地址 同步设置给 当前页面的数据
       this.user.photo = result.photo // 将上传成功的头像设置给当前头像
+      this.updatePhoto({ photo: result.photo }) // 更改vuex里面的state里面的用户头像
       this.showPhoto = false // 关闭弹层
     },
     // 保存方法  调用保存接口  这里是不需要传photo数据的
