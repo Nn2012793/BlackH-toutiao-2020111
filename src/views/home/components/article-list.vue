@@ -1,5 +1,5 @@
 <template>
-  <div class="scroll-wrapper">
+  <div class="scroll-wrapper" @scroll="remember" ref="articleList">
     <van-pull-refresh v-model="downLoading" @refresh="onRefresh" :success-text="refreshSucessText">
       <!-- //防止van-list组件，实现上拉加载 -->
       <van-list v-model="upLoading" :finished="finished" finished-text="真的没有了" @load="onLoad">
@@ -58,7 +58,8 @@ export default {
       articles: [], // 空数组接受上拉加载数据
       downLoading: false, // 默认不开启下拉刷新
       refreshSucessText: '',
-      timestamp: null // 定义一个时间戳，告诉服务器需求哪个时间的数据
+      timestamp: null, // 定义一个时间戳，告诉服务器需求哪个时间的数据
+      scrollTop: 0 // 页面初始位置
     }
   },
   methods: {
@@ -126,6 +127,11 @@ export default {
         // 没有新数据的情况
         this.refreshSucessText = `已是最新数据`
       }
+    },
+    // 页面滚动触发的事件
+    remember (event) {
+      // 记录滚动条，距离顶部的高度
+      this.scrollTop = event.target.scrollTop
     }
   },
   created () {
@@ -137,6 +143,19 @@ export default {
         }
       }
     })
+    eventBus.$on('changeTap', id => {
+      this.$nextTick(() => {
+        if (this.scrollTop && this.$refs.articleList) {
+          this.$refs.articleList.scrollTop = this.scrollTop
+        }
+      })
+    })
+  },
+  activated () {
+    if (this.scrollTop && this.$refs.articleList) {
+      // 当scrollTop不为0  并且dom元素存在
+      this.$refs.articleList.scrollTop = this.scrollTop
+    }
   }
 }
 </script>

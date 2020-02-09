@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <van-tabs swipeable v-model="activeIndex">
+    <van-tabs swipeable v-model="activeIndex" @change="changeTap">
       <van-tab v-for="item in channels" :title="item.name" :key="item.id">
         <!-- // 这里的div设置了滚动条 目的是给后面做阅读记忆 留下伏笔 -->
         <!-- // 阅读记忆---文章看到一半的时候，滑倒了其他区域或者页面，回来时，文章还保持在原位置 -->
@@ -97,6 +97,9 @@ export default {
     async addChannel (channel) {
       await addChannel(channel)
       this.channels.push(channel)
+    },
+    changeTap () {
+      eventBus.$emit('changeTap', this.channels[this.activeIndex].id)
     }
   },
   created () {

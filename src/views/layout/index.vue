@@ -8,9 +8,12 @@
     fixed
     @click-right="$router.push('/search')">
     </van-nav-bar>
-    <!-- 显示区域 -->
+    <!-- 显示区域  二级路由组件 可以直接缓存二级路由容器
+     缓存了这个容器以后，该容器下的所有组件都会被缓存-->
     <div class="my-wrapper" :class="{noTop:!showNavBar}">
+      <keep-alive>
       <router-view></router-view>
+      </keep-alive>
     </div>
     <!-- 标签栏 -->
     <van-tabbar route>

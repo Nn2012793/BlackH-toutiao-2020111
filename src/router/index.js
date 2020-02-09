@@ -22,7 +22,8 @@ const routes = [
     children: [{
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: { isAlive: true } // 当二级路由与一级路由路径相同时，mate要写在二级路由里
     },
     {
       path: '/question',
