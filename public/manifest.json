@@ -1,7 +1,7 @@
 {
     "@platforms" : [ "android", "iPhone", "iPad" ],
-    "id" : "H5E704E38", /*应用的标识，创建应用时自动生成，勿手动修改*/
-    "name" : "HMTT", /*应用名称，程序桌面图标名称*/
+    "id" : "H5804E3B1", /*应用的标识，创建应用时自动生成，勿手动修改*/
+    "name" : "黑马头条", /*应用名称，程序桌面图标名称*/
     "version" : {
         "name" : "1.0.0", /*应用版本名称*/
         "code" : "83"
@@ -175,8 +175,8 @@
                 },
                 "maps" : {
                     "baidu" : {
-                        "appkey_ios" : "G48M5RLj0z8r1wGDdDVgS5fVmkF4BZH2",
-                        "appkey_android" : "G48M5RLj0z8r1wGDdDVgS5fVmkF4BZH2"
+                        "appkey_ios" : "4HKL6SBwntQfb8e3YEM4ye6iQWbTlTYH",
+                        "appkey_android" : "4HKL6SBwntQfb8e3YEM4ye6iQWbTlTYH"
                     }
                 }
             }
