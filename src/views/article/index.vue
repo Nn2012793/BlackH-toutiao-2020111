@@ -18,9 +18,9 @@
       </div>
       <div class="zan">
        <!-- :class="{css名称: 布尔值}" -->
-        <van-button round size="small" :class="{active: article.attitude === 1}" plain icon="like-o">点赞</van-button>
+        <van-button round size="small" @click="article.attitude=article.attitude ? null : 1" :class="{active: article.attitude === 1}" plain icon="like-o">点赞</van-button>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <van-button round size="small" :class="{active: article.attitude === 0}" plain icon="delete">不喜欢</van-button>
+        <van-button round size="small" @click="article.attitude=article.attitude===0 ? null : 0" :class="{active: article.attitude === 0}" plain icon="delete">不喜欢</van-button>
       </div>
     </div>
     <my-comments></my-comments>

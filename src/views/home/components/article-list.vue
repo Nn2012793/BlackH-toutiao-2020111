@@ -23,7 +23,7 @@
               <span
               class="close"
               v-if="user.token"
-              @click="$emit('showMoreAction',article.art_id.toString())"
+              @click.stop="$emit('showMoreAction',article.art_id.toString())"
               >
                 <van-icon name="cross"></van-icon>
               </span>
